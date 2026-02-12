@@ -10,6 +10,10 @@ const progressBar = document.getElementById('progressBar');
 const progressPercent = document.getElementById('progressPercent');
 const rankDisplay = document.getElementById('userRank');
 
+// Referencat e reja për Neuroplasticitetin
+const dopamineDisplay = document.getElementById('dopamineLevel');
+const healingDisplay = document.getElementById('healingPercent');
+
 // 3. Funksioni për të përditësuar pamjen (UI)
 function updateUI() {
     // Përditëso numrin e ditëve
@@ -20,8 +24,9 @@ function updateUI() {
     progressBar.style.width = percent + "%";
     progressPercent.innerText = percent + "%";
 
-    // Përditësimi i Rank-ut (Titujve)
+    // Përditësimi i Rank-ut dhe Statustit të Trurit
     updateRank();
+    updateBrainStats();
 
     // Përditësimi i Historikut (Timeline) me ikona
     if (historyData.length === 0) {
@@ -56,7 +61,33 @@ function updateRank() {
     }
 }
 
-// 5. Funksioni Check-in me Efekt Festimi
+// 5. Funksioni i ri: Llogaritja e Neuroplasticitetit
+function updateBrainStats() {
+    let healing;
+    let status;
+
+    if (days === 0) {
+        status = "Resetting...";
+        healing = 0;
+    } else if (days < 7) {
+        status = "Low/Irritable";
+        healing = Math.min((days / 7) * 15, 15); 
+    } else if (days < 21) {
+        status = "Recalibrating";
+        healing = 15 + ((days - 7) / 14) * 25; 
+    } else if (days < 60) {
+        status = "Stabilizing";
+        healing = 40 + ((days - 21) / 39) * 40; 
+    } else {
+        status = "Healthy/Receptor Up";
+        healing = Math.min(80 + ((days - 60) / 30) * 20, 100);
+    }
+
+    dopamineDisplay.innerText = status;
+    healingDisplay.innerText = healing.toFixed(0) + "%";
+}
+
+// 6. Funksioni Check-in me Efekt Festimi dhe Programim Njoftimi
 function checkIn() {
     // Shpërthimi i Confetti-t
     confetti({
@@ -86,6 +117,21 @@ function checkIn() {
     localStorage.setItem('habitDays', days);
     localStorage.setItem('habitHistory', JSON.stringify(historyData));
 
+    // PROGRAMIMI I NJOFTIMIT (Pas 24 orësh)
+    if ('serviceWorker' in navigator && Notification.permission === 'granted') {
+        navigator.serviceWorker.ready.then(registration => {
+            // Koha: 24 orë (86,400,000 ms)
+            // Për TEST: Ndryshoje në 10000 (10 sekonda)
+            const delay24h = 86400000; 
+            
+            registration.active.postMessage({
+                type: 'SCHEDULE_NOTIFICATION',
+                delay: delay24h
+            });
+            console.log("Rikujtesa u programua.");
+        });
+    }
+
     // Mesazhet motivuese
     const quotes = [
         "Ti je më i fortë se instinkti!",
@@ -103,15 +149,15 @@ function checkIn() {
     updateUI();
 }
 
-// 6. Funksioni i Emergjencës (Video e re aktive)
+// 7. Funksioni i Emergjencës (Video motivuese)
 function emergencyMode() {
     const confirmEmergency = confirm("Ndihesh nën presion? Mos u dorëzo tani! Do të hapet një video motivuese për të të kthyer në lojë.");
     if (confirmEmergency) {
-        // Linku i ri i videos (Motivational Speech)
         window.open("https://www.youtube.com/watch?v=wnHW6o8WMas", "_blank");
     }
 }
-// 7. Funksioni Reset me Mbrojtje PIN (0000)
+
+// 8. Funksioni Reset me Mbrojtje PIN (0000)
 function resetCounter() {
     let firstConfirm = confirm("KUJDES! Ky veprim do të fshijë çdo fitore dhe progres që ke bërë.");
     
@@ -133,5 +179,17 @@ function resetCounter() {
     }
 }
 
-// 8. Ekzekutimi fillestar për të ngarkuar të dhënat në ekran
+// 9. Kërkesa për leje njoftimesh sapo hapet app-i
+function requestNotificationPermission() {
+    if ("Notification" in window) {
+        Notification.requestPermission().then(permission => {
+            if (permission === "granted") {
+                console.log("Njoftimet u lejuan nga përdoruesi.");
+            }
+        });
+    }
+}
+
+// 10. Ekzekutimi fillestar
+requestNotificationPermission();
 updateUI();

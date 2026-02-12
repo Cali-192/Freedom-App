@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Freedom App - Tracker Profesional</title>
+    
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#0f172a">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/4236/4236401.png">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="habit.css">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+
+    <div class="container d-flex justify-content-center align-items-center min-vh-100 py-5">
+        <div class="tracker-card">
+            <div class="d-flex flex-column align-items-center mb-3">
+                <div class="status-badge">
+                    <i class="fas fa-shield-halved me-1"></i> RECOVERY MODE: ACTIVE
+                </div>
+                <div id="userRank" class="badge bg-warning text-dark mt-2" style="font-size: 0.65rem; letter-spacing: 2px; font-weight: 800; text-transform: uppercase;">
+                    RANK: FILLERAR
+                </div>
+            </div>
+
+            <h2 class="fw-bold">Ditët e Lirisë</h2>
+            <p class="text-muted small">Progresi yt drejt zotërimit të vetvetes</p>
+            
+            <div class="days-display shadow-sm">
+                <i class="fas fa-crown mb-2" style="color: rgba(56,189,248,0.3); font-size: 1.2rem;"></i>
+                <span id="dayCount">0</span>
+                <small>STREAK</small>
+            </div>
+
+            <div class="progress-container my-4 text-start">
+                <div class="d-flex justify-content-between mb-1">
+                    <span class="small fw-bold text-secondary">Objektivi: 90 Ditë</span>
+                    <span id="progressPercent" class="small fw-bold">0%</span>
+                </div>
+                <div class="progress" style="height: 12px; background: #2d343f; border-radius: 10px; border: 1px solid rgba(255,255,255,0.05);">
+                    <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated bg-info" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <p id="quote" class="my-4 text-info italic" style="min-height: 48px; font-size: 0.9rem;">
+                "Fillimi është hapi më i rëndësishëm."
+            </p>
+
+            <div class="d-grid gap-3">
+                <button class="btn btn-primary btn-lg shadow-sm fw-bold py-3" onclick="checkIn()">
+                    <i class="fas fa-rocket me-2"></i> LOG DAILY VICTORY
+                </button>
+                
+                <button class="btn btn-emergency btn-sm fw-bold py-2" onclick="emergencyMode()">
+                    <i class="fas fa-bolt-lightning me-2"></i> EMERGENCY (URGE)
+                </button>
+
+                <button class="btn btn-link text-danger btn-sm mt-2 text-decoration-none border-0" onclick="resetCounter()">
+                    <i class="fas fa-skull-crossbones me-1"></i> Report Relapse (Reset)
+                </button>
+            </div>
+
+            <div class="timeline-section mt-5 text-start">
+                <h6 class="fw-bold mb-3 text-uppercase small" style="letter-spacing: 1px; color: #64748b;">
+                    <i class="fas fa-history me-2"></i>Fitoret e fundit
+                </h6>
+                <div id="timeline" class="timeline-list">
+                    <p class="text-muted small italic text-center">Nis betejën sot!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="habit.js"></script>
+</body>
+</html>
